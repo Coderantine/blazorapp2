@@ -1,1 +1,1 @@
-# blazorapp2
+# Blazor App 2
