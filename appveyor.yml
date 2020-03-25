@@ -15,7 +15,7 @@ build_script:
 
 artifacts:
 - path: '\BlazorApp2\bin\Release\netcoreapp3.1\publish'
-  name: coderantine-ui
+  name: blazorapp2
   type: zip
   
 deploy:
@@ -23,11 +23,8 @@ deploy:
   website: blazorapp2-ui
   username: $blazorapp2-ui
   password:
-    secure: BLN3bk7SlZlR2LfCK2+cdbwQ8L3cb/Y+5lqpzc9/TqceTbSCST6RVTtvHZgjAiFo3pZ+ESduUwiFZfqDzE2hnA==
+    secure: oWYfA4Jz7mrl1+5uVcnre3Gw781WumfE5qbNZ86RZZslV9RFD5oWrwrjBvsb6YAbx1VCxEbZF80UnvREHA4ZZA==
   async_deploy: false
   
   on:
     branch: master
-    
-after_deploy:
-- cmd: 'curl -X POST "https://api.cloudflare.com/client/v4/zones/b191134f8a3aa81ca423d92de31ebf96/purge_cache" -H "X-Auth-Email: %CF-USERNAME%" -H "X-Auth-Key: %CF-API-KEY%" -H "Content-Type: application/json" --data "{\"purge_everything\":true}"'
