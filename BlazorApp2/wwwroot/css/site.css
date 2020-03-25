@@ -1,0 +1,40 @@
+:root {
+    --global-font-size: 15px;
+    --global-line-height: 1.4em;
+    --global-space: 10px;
+    --font-stack: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    --mono-font-stack: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    --background-color: #222225;
+    --page-width: 60em;
+    --font-color: #e8e9ed;
+    --invert-font-color: #222225;
+    --secondary-color: #a3abba;
+    --tertiary-color: #a3abba;
+    --primary-color: #ffb039;
+    --error-color: #ff3c74;
+    --progress-bar-background: #ffb039;
+    --progress-bar-fill: #62c4ff;
+    --code-bg-color: #3f3f44;
+    --input-style: solid;
+    --display-h1-decoration: none;
+}
+
+img {
+    width: inherit;
+}
+
+section {
+    padding-bottom: 20px;
+}
+
+.del {
+    text-decoration: line-through;
+}
+
+.btn.btn-sm {
+    padding: 0.2em 1em;
+}
+
+.btn.btn-xs {
+    padding: 0 0.3em;
+}

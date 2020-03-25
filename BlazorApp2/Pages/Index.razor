@@ -1,0 +1,165 @@
+﻿@page "/"
+@using BlazorApp2.Data
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorageService
+
+<section>
+    <header>
+        <h2>Welcome</h2>
+    </header>
+    <p>
+        Dear <a>&lt;blank&gt;</a>, congratulations!
+        You are one in a billon who searched <strong>BlazorApp2</strong>. <br /> We are second but we are better than <a target="_blank" href="https://blazorapp1.com">BlazorApp1</a>.
+
+    </p>
+</section>
+
+<section>
+    <header>
+        <h2>ToDos</h2>
+    </header>
+    <div>
+        @if (State == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            @if (!State.ToDos.Any())
+            {
+                <p>You don't have anything to do.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var todo in State.ToDos)
+                    {
+                        <li title="@((todo.IsCompleted ? todo.UpdatedDate : todo.CreatedDate).ToString())">
+                            <button class="btn btn-primary btn-xs @(todo.IsCompleted ? string.Empty: "btn-ghost")" @onclick="((args) => UpdateStatusAsync(todo.Id, !todo.IsCompleted))">
+                                @if (todo.IsCompleted)
+                                {
+                                    <span>+</span>
+                                }
+                                else
+                                {
+                                    <span>&nbsp;</span>
+                                }
+                            </button>
+                            <span class="@(GetTodoTitleClass(todo))">@todo.Title</span>
+                            <a @onclick="(() => DeleteAsync(todo.Id))">d</a>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <EditForm Model="ActiveToDoItem" OnValidSubmit="OnToDoSubmit">
+                <DataAnnotationsValidator />
+                <InputText @bind-Value="ActiveToDoItem.Title" placeholder="Title" />
+                <button class="btn btn-sm btn-primary btn-ghost" type="submit">Add</button>
+            </EditForm>
+        }
+    </div>
+</section>
+
+<section>
+    <header><h2>Creators</h2></header>
+    <ul>
+        <li><a target="_blank" href="https://github.com/purplethebest">purplethebest</a></li>
+        <li><a target="_blank" href="https://github.com/arkoc">arkoc</a></li>
+    </ul>
+</section>
+
+
+@code {
+
+    private const string STATE_KEY = "__state";
+    private const int MAX_TODO_COUNT = 20;
+
+    protected State State { get; set; }
+
+    protected ToDoItem ActiveToDoItem { get; set; } = new ToDoItem();
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            State = await LocalStorageService.GetItemAsync<State>(STATE_KEY) ?? new State();
+            SortToDos();
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected async Task OnToDoSubmit()
+    {
+        if (ActiveToDoItem.Id == default)
+        {
+            ActiveToDoItem.Id = Guid.NewGuid();
+            ActiveToDoItem.CreatedDate = DateTimeOffset.Now;
+        }
+
+        var existing = State.ToDos.FirstOrDefault(x => x.Id == ActiveToDoItem.Id);
+        if (existing != null)
+        {
+            State.ToDos.Remove(existing);
+        }
+
+        ActiveToDoItem.UpdatedDate = DateTimeOffset.Now;
+        ActiveToDoItem.Title = ActiveToDoItem.Title.Trim();
+
+        if (State.ToDos.Count < MAX_TODO_COUNT)
+        {
+            State.ToDos.Add(ActiveToDoItem);
+            await SaveStateAsync();
+        }
+
+        ActiveToDoItem = new ToDoItem();
+    }
+
+    protected string GetTodoTitleClass(ToDoItem todo)
+    {
+        var className = string.Empty;
+
+        if (todo.IsCompleted)
+        {
+            className = "del";
+        }
+
+        return className;
+    }
+
+    protected async Task UpdateStatusAsync(Guid id, bool isCompleted)
+    {
+        var existing = State.ToDos.FirstOrDefault(x => x.Id == id);
+        if (existing != null)
+        {
+            existing.IsCompleted = isCompleted;
+            existing.UpdatedDate = DateTimeOffset.Now;
+            await SaveStateAsync();
+        }
+    }
+
+    protected async Task DeleteAsync(Guid id)
+    {
+        var existing = State.ToDos.FirstOrDefault(x => x.Id == id);
+        if (existing != null)
+        {
+            State.ToDos.Remove(existing);
+        }
+
+        await SaveStateAsync();
+    }
+
+    protected void SortToDos()
+    {
+        State.ToDos = State.ToDos
+            .OrderBy(x => x.IsCompleted)
+            .ThenByDescending(y => y.CreatedDate).ToList();
+    }
+
+    protected async Task SaveStateAsync()
+    {
+        await LocalStorageService.SetItemAsync(STATE_KEY, State);
+    }
+}

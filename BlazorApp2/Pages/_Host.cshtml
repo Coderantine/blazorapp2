@@ -1,0 +1,65 @@
+﻿@page "/"
+@namespace BlazorApp2.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name=”description” content="BlazorApp2">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="BlazorApp,BlazorApp0,BlazorApp1,BlazorApp2">
+
+    <link rel="shortcut icon" href="~/favicon.png" />
+    <link rel="stylesheet" href="~/lib/normalize/normalize.min.css" />
+    <link rel="stylesheet" href="~/lib/terminal.css/dist/terminal.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-utilities/bootstrap-utilities.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <title>BlazorApp2</title>
+</head>
+
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+            <header class="terminal-logo">
+                <div class="logo terminal-prompt"><a asp-page="Index" class="no-style">BlazorApp2</a></div>
+            </header>
+            <nav class="terminal-menu">
+                <ul>
+
+                </ul>
+            </nav>
+        </div>
+
+        <app>
+            <component type="typeof(App)" render-mode="ServerPrerendered" />
+        </app>
+
+        <footer>
+            <p>
+                All rights are reserved. &copy; <a href="https://BlazorApp2.com/" target="_blank" rel="noopener noreferer">BlazorApp2</a> @DateTimeOffset.UtcNow.Year
+            </p>
+        </footer>
+    </div>
+    <script src="_framework/blazor.server.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/rythm.js/rythm.min.js"></script>
+    <script src="~/lib/egg.js/egg.min.js"></script>
+    <script src="~/lib/highlight.js/highlight.min.js"></script>
+    <script src="~/js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
